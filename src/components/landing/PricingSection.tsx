@@ -2,278 +2,340 @@ import React from 'react';
 import {
   Box,
   Container,
-  Grid,
   Typography,
+  Grid,
   Card,
+  CardContent,
   Button,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  alpha,
   useTheme,
   useMediaQuery,
+  alpha,
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-const plans = [
+const pricingPlans = [
   {
-    name: 'Starter',
-    price: '$99',
-    period: 'per month',
-    description: 'Perfect for early-stage venture firms',
+    title: 'Starter',
+    price: '$490',
+    period: '/month',
     features: [
-      'Up to 10 portfolio companies',
-      'Basic document requests',
-      'Real-time tracking',
-      'Standard security',
+      'Up to 5 portfolio companies',
+      'Basic document request templates',
+      'Real-time submission dashboard',
+      'Basic security & encryption',
       'Email support',
+      '50GB storage',
     ],
+    buttonText: 'Start Free Trial',
     isPopular: false,
   },
   {
-    name: 'Professional',
-    price: '$299',
-    period: 'per month',
-    description: 'Ideal for growing investment firms',
+    title: 'Professional',
+    price: '$990',
+    period: '/month',
     features: [
-      'Up to 50 portfolio companies',
-      'Advanced document templates',
-      'Analytics dashboard',
-      'Enhanced security',
+      'Up to 20 portfolio companies',
+      'Advanced document automation',
+      'Custom template creation',
+      'Automated reminders',
+      'Real-time collaboration tools',
+      'Advanced security & access control',
       'Priority support',
-      'API access',
-      'Custom integrations',
+      '200GB storage',
     ],
+    buttonText: '14-Day Free Trial',
     isPopular: true,
   },
   {
-    name: 'Enterprise',
+    title: 'Enterprise',
     price: 'Custom',
-    period: 'contact us',
-    description: 'For large investment firms',
+    period: '',
     features: [
       'Unlimited portfolio companies',
-      'Custom workflow automation',
-      'Advanced analytics & reporting',
-      'Enterprise-grade security',
-      'Dedicated support team',
-      'Full API access',
-      'Custom development',
-      'SLA guarantee',
+      'AI-powered data analytics',
+      'Custom workflow setup',
+      'Dedicated API access',
+      'SSO integration',
+      'Dedicated account manager',
+      '24/7 premium support',
+      'Unlimited storage',
     ],
+    buttonText: 'Contact Sales',
     isPopular: false,
   },
 ];
 
-export const PricingSection: React.FC = () => {
+export const PricingSection = () => {
   const theme = useTheme();
+  const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
     <Box
       id="pricing"
       sx={{
-        py: { xs: 8, sm: 10, md: 16, lg: 20 },
-        px: { xs: 2, sm: 3, md: 4 },
-        background: `linear-gradient(180deg, 
-          ${alpha(theme.palette.primary.dark, 0.95)} 0%,
-          ${alpha('#000', 0.97)} 100%)`,
         position: 'relative',
-        overflow: 'hidden',
+        py: { xs: 6, sm: 8, md: 12 },
+        px: { xs: 2, sm: 3, md: 4 },
+        background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 100%)',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '100%',
+          background:
+            'radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15), transparent 70%)',
+          pointerEvents: 'none',
+        },
       }}
     >
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
-        <Box sx={{ textAlign: 'center', mb: { xs: 5, sm: 6, md: 8, lg: 10 } }}>
+      <Container maxWidth="lg">
+        <Box sx={{ textAlign: 'center', mb: { xs: 4, sm: 6, md: 8 } }}>
           <Typography
             variant="h2"
             sx={{
-              fontSize: {
-                xs: '1.75rem',
-                sm: '2.25rem',
-                md: '3rem',
-                lg: '3.5rem',
-              },
+              fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' },
+              lineHeight: { xs: 1.3, sm: 1.4, md: 1.2 },
               fontWeight: 800,
               background: 'linear-gradient(to right, #FFFFFF 20%, #94A3B8 80%)',
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               color: 'transparent',
-              mb: 2,
-              lineHeight: { xs: 1.3, md: 1.2 },
+              mb: { xs: 1.5, sm: 2 },
+              px: { xs: 2, sm: 0 },
             }}
           >
             Simple, Transparent Pricing
           </Typography>
           <Typography
+            variant="h6"
             sx={{
-              color: '#9E9E9E',
-              fontSize: { xs: '0.95rem', sm: '1rem', md: '1.2rem' },
+              color: 'grey.400',
               maxWidth: '600px',
               mx: 'auto',
-              px: { xs: 2, sm: 0 },
+              fontSize: { xs: '0.875rem', sm: '1rem', md: '1.25rem' },
+              px: { xs: 2, sm: 4, md: 0 },
               lineHeight: { xs: 1.5, md: 1.6 },
             }}
           >
-            Choose the perfect plan for your investment firm
+            Choose the perfect plan for your team's needs
           </Typography>
         </Box>
 
         <Grid
           container
-          spacing={{ xs: 3, sm: 4, md: 4 }}
-          alignItems="center"
+          spacing={{ xs: 2, sm: 3, md: 4 }}
           sx={{
-            px: { xs: 1, sm: 2, md: 0 },
+            justifyContent: 'center',
+            position: 'relative',
+            zIndex: 1,
           }}
         >
-          {plans.map((plan) => (
-            <Grid item xs={12} sm={6} md={4} key={plan.name}>
+          {pricingPlans.map((plan) => (
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              lg={4}
+              key={plan.title}
+              sx={{
+                display: 'flex',
+              }}
+            >
               <Card
                 sx={{
-                  background: `linear-gradient(135deg, 
-                    ${alpha('#fff', plan.isPopular ? 0.1 : 0.05)} 0%, 
-                    ${alpha('#fff', plan.isPopular ? 0.05 : 0.02)} 100%)`,
-                  backdropFilter: 'blur(20px)',
-                  borderRadius: { xs: '20px', md: '24px' },
-                  border: `1px solid ${alpha(
-                    '#fff',
-                    plan.isPopular ? 0.15 : 0.1
-                  )}`,
-                  p: { xs: 3, sm: 3.5, md: 4 },
-                  height: '100%',
+                  width: '100%',
+                  background: plan.isPopular
+                    ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%)'
+                    : 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid',
+                  borderColor: plan.isPopular
+                    ? 'primary.main'
+                    : 'rgba(255, 255, 255, 0.08)',
+                  borderRadius: { xs: 3, sm: 4 },
                   position: 'relative',
-                  overflow: 'hidden',
-                  transition: 'all 0.3s ease-out',
-                  transform: {
-                    xs: 'none',
-                    md: plan.isPopular ? 'scale(1.05)' : 'none',
-                  },
+                  overflow: 'visible',
+                  transition: 'all 0.3s ease',
+                  mx: { xs: 2, sm: 0 },
                   '&:hover': {
-                    transform: {
-                      xs: 'scale(1.02)',
-                      md: plan.isPopular ? 'scale(1.05)' : 'scale(1.02)',
+                    transform: { xs: 'none', sm: 'translateY(-8px)' },
+                    boxShadow: plan.isPopular
+                      ? `0 20px 40px -15px ${alpha(
+                          theme.palette.primary.main,
+                          0.3
+                        )}`
+                      : '0 20px 40px -15px rgba(0, 0, 0, 0.5)',
+                    borderColor: plan.isPopular
+                      ? alpha(theme.palette.primary.main, 0.8)
+                      : 'rgba(255, 255, 255, 0.15)',
+                    '& .pricing-glow': {
+                      opacity: 0.8,
                     },
-                    background: `linear-gradient(135deg, 
-                      ${alpha('#fff', plan.isPopular ? 0.12 : 0.07)} 0%, 
-                      ${alpha('#fff', plan.isPopular ? 0.07 : 0.04)} 100%)`,
                   },
                 }}
               >
+                <Box
+                  className="pricing-glow"
+                  sx={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '100%',
+                    background: plan.isPopular
+                      ? `radial-gradient(circle at 50% 0%, ${alpha(
+                          theme.palette.primary.main,
+                          0.15
+                        )}, transparent 70%)`
+                      : 'radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.08), transparent 70%)',
+                    opacity: 0,
+                    transition: 'opacity 0.3s ease',
+                    pointerEvents: 'none',
+                  }}
+                />
+
                 {plan.isPopular && (
                   <Box
                     sx={{
                       position: 'absolute',
-                      top: { xs: 16, md: 20 },
-                      right: { xs: -30, md: -35 },
-                      transform: 'rotate(45deg)',
-                      background: theme.palette.primary.main,
+                      top: -12,
+                      right: { xs: 12, sm: 20 },
+                      background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
                       color: 'white',
-                      px: { xs: 3, md: 4 },
-                      py: 0.5,
-                      fontSize: { xs: '0.8rem', md: '0.875rem' },
-                      fontWeight: 500,
+                      px: { xs: 2, sm: 3 },
+                      py: 1,
+                      borderRadius: '20px',
+                      fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                      fontWeight: 600,
+                      boxShadow: `0 4px 15px -3px ${alpha(
+                        theme.palette.primary.main,
+                        0.5
+                      )}`,
+                      backdropFilter: 'blur(10px)',
                     }}
                   >
-                    Popular
+                    Most Popular
                   </Box>
                 )}
-                <Typography
-                  variant="h5"
-                  sx={{
-                    color: 'white',
-                    fontWeight: 700,
-                    mb: 1,
-                    fontSize: { xs: '1.25rem', md: '1.5rem' },
-                  }}
+
+                <CardContent
+                  sx={{ p: { xs: 2.5, sm: 3, md: 4 }, position: 'relative' }}
                 >
-                  {plan.name}
-                </Typography>
-                <Typography
-                  variant="h3"
-                  sx={{
-                    color: 'white',
-                    fontWeight: 800,
-                    mb: 1,
-                    display: 'flex',
-                    alignItems: 'baseline',
-                    fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
-                  }}
-                >
-                  {plan.price}
                   <Typography
-                    component="span"
+                    variant="h5"
                     sx={{
-                      color: '#9E9E9E',
-                      ml: 1,
-                      fontSize: { xs: '0.875rem', md: '1rem' },
+                      color: 'white',
+                      fontWeight: 700,
+                      mb: { xs: 1.5, sm: 2 },
+                      fontSize: { xs: '1.25rem', sm: '1.5rem' },
                     }}
                   >
-                    /{plan.period}
+                    {plan.title}
                   </Typography>
-                </Typography>
-                <Typography
-                  sx={{
-                    color: '#9E9E9E',
-                    mb: 4,
-                    minHeight: { xs: 'auto', md: '48px' },
-                    fontSize: { xs: '0.875rem', md: '1rem' },
-                    lineHeight: { xs: 1.5, md: 1.6 },
-                  }}
-                >
-                  {plan.description}
-                </Typography>
-                <Button
-                  variant={plan.isPopular ? 'contained' : 'outlined'}
-                  fullWidth
-                  sx={{
-                    py: { xs: 1.25, md: 1.5 },
-                    mb: { xs: 3, md: 4 },
-                    borderRadius: { xs: '10px', md: '12px' },
-                    fontSize: { xs: '1rem', md: '1.1rem' },
-                    fontWeight: 600,
-                    ...(plan.isPopular && {
-                      background: `linear-gradient(135deg, 
-                        ${theme.palette.primary.main} 0%, 
-                        ${theme.palette.primary.dark} 100%)`,
-                    }),
-                  }}
-                >
-                  {plan.price === 'Custom' ? 'Contact Us' : 'Get Started'}
-                </Button>
-                <List disablePadding>
-                  {plan.features.map((feature) => (
-                    <ListItem
-                      key={feature}
-                      disablePadding
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'baseline',
+                      mb: { xs: 2, sm: 3 },
+                    }}
+                  >
+                    <Typography
+                      variant="h3"
                       sx={{
-                        mb: { xs: 1.5, md: 2 },
+                        color: 'white',
+                        fontWeight: 800,
+                        fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+                        lineHeight: 1,
                       }}
                     >
-                      <ListItemIcon sx={{ minWidth: { xs: 35, md: 40 } }}>
-                        <CheckCircleIcon
+                      {plan.price}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: 'grey.400',
+                        ml: 1,
+                        fontSize: { xs: '0.875rem', sm: '1.1rem' },
+                      }}
+                    >
+                      {plan.period}
+                    </Typography>
+                  </Box>
+                  <List sx={{ mb: { xs: 3, sm: 4 } }}>
+                    {plan.features.map((feature) => (
+                      <ListItem
+                        key={feature}
+                        sx={{
+                          px: 0,
+                          py: { xs: 0.75, sm: 1 },
+                        }}
+                      >
+                        <ListItemIcon sx={{ minWidth: { xs: 32, sm: 36 } }}>
+                          <CheckCircleIcon
+                            sx={{
+                              color: plan.isPopular
+                                ? theme.palette.primary.main
+                                : alpha('#fff', 0.5),
+                              fontSize: { xs: '1.25rem', sm: '1.5rem' },
+                            }}
+                          />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={feature}
                           sx={{
-                            color: plan.isPopular
-                              ? theme.palette.primary.main
-                              : 'white',
-                            fontSize: { xs: '1.25rem', md: '1.5rem' },
+                            '& .MuiListItemText-primary': {
+                              color: 'grey.300',
+                              fontSize: { xs: '0.875rem', sm: '1rem' },
+                              lineHeight: { xs: 1.4, sm: 1.5 },
+                            },
                           }}
                         />
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={feature}
-                        sx={{
-                          color: '#E0E0E0',
-                          '& .MuiListItemText-primary': {
-                            fontSize: { xs: '0.875rem', md: '1rem' },
-                            lineHeight: { xs: 1.5, md: 1.6 },
-                          },
-                        }}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
+                      </ListItem>
+                    ))}
+                  </List>
+                  <Button
+                    variant={plan.isPopular ? 'contained' : 'outlined'}
+                    fullWidth
+                    sx={{
+                      py: { xs: 1.25, sm: 1.5 },
+                      borderRadius: { xs: 1.5, sm: 2 },
+                      fontSize: { xs: '0.875rem', sm: '1rem' },
+                      fontWeight: 600,
+                      backdropFilter: 'blur(10px)',
+                      ...(plan.isPopular
+                        ? {
+                            background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+                            boxShadow: `0 8px 25px -5px ${alpha(
+                              theme.palette.primary.main,
+                              0.5
+                            )}`,
+                            '&:hover': {
+                              transform: { xs: 'none', sm: 'translateY(-2px)' },
+                              boxShadow: `0 12px 30px -5px ${alpha(
+                                theme.palette.primary.main,
+                                0.6
+                              )}`,
+                            },
+                          }
+                        : {
+                            borderColor: 'rgba(255, 255, 255, 0.2)',
+                            '&:hover': {
+                              borderColor: 'rgba(255, 255, 255, 0.4)',
+                              background: 'rgba(255, 255, 255, 0.05)',
+                            },
+                          }),
+                      transition: 'all 0.3s ease',
+                    }}
+                  >
+                    {plan.buttonText}
+                  </Button>
+                </CardContent>
               </Card>
             </Grid>
           ))}

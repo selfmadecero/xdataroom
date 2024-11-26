@@ -20,3 +20,8 @@ export interface User {
   role: 'investor' | 'company';
   companyId?: string;
 }
+
+export interface MobileMenuProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
