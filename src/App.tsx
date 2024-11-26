@@ -1,26 +1,35 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Dashboard } from './components/Dashboard';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/Layout';
-import { CompanyDetail } from './components/CompanyDetail';
-import { DocumentDetail } from './components/DocumentDetail';
+import { Dashboard } from './components/Dashboard';
+import { PortfoliosPage } from './components/PortfoliosPage';
 import { AppProvider } from './context/AppContext';
-import { LandingLayout } from './components/landing/LandingLayout';
 
-function App() {
+// 임시 랜딩 페이지
+const LandingPage = () => (
+  <div style={{ padding: 20 }}>
+    <h1>Welcome to xDataRoom</h1>
+    <a href="/dashboard">Go to Dashboard</a>
+  </div>
+);
+
+const App = () => {
   return (
-    <AppProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AppProvider>
         <Routes>
-          <Route path="/" element={<LandingLayout />} />
-          <Route path="/dashboard" element={<Layout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="company/:id" element={<CompanyDetail />} />
-            <Route path="document/:id" element={<DocumentDetail />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route element={<Layout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/portfolio" element={<PortfoliosPage />} />
+            <Route path="/documents" element={<div>Documents Page</div>} />
+            <Route path="/reports" element={<div>Reports Page</div>} />
+            <Route path="/settings" element={<div>Settings Page</div>} />
           </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </BrowserRouter>
-    </AppProvider>
+      </AppProvider>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;

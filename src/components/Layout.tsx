@@ -2,17 +2,14 @@ import { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import {
   Box,
-  AppBar,
-  Toolbar,
-  Drawer,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
   Typography,
   IconButton,
-  Avatar,
   InputBase,
+  Avatar,
   Badge,
   useTheme,
 } from '@mui/material';
@@ -20,13 +17,12 @@ import {
   Dashboard as DashboardIcon,
   Business as BusinessIcon,
   Description as DescriptionIcon,
-  ShowChart as ShowChartIcon,
+  Assessment as ReportsIcon,
   Settings as SettingsIcon,
-  Notifications as NotificationsIcon,
   Search as SearchIcon,
+  Notifications as NotificationsIcon,
+  KeyboardArrowDown as KeyboardArrowDownIcon,
 } from '@mui/icons-material';
-
-const DRAWER_WIDTH = 256;
 
 export const Layout = () => {
   const theme = useTheme();
@@ -34,80 +30,166 @@ export const Layout = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const menuItems = [
-    { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
-    { text: 'Portfolio', icon: <BusinessIcon />, path: '/portfolio' },
+    { text: 'Home', icon: <DashboardIcon />, path: '/dashboard' },
+    { text: 'Portfolios', icon: <BusinessIcon />, path: '/portfolio' },
     { text: 'Documents', icon: <DescriptionIcon />, path: '/documents' },
-    { text: 'Analytics', icon: <ShowChartIcon />, path: '/analytics' },
+    { text: 'Reports', icon: <ReportsIcon />, path: '/reports' },
     { text: 'Settings', icon: <SettingsIcon />, path: '/settings' },
   ];
 
   return (
-    <div className="flex h-screen">
-      {/* 사이드바 */}
-      <div className="w-64 bg-white border-r">
-        <div className="h-16 flex items-center justify-center border-b">
-          <img src="/logo.svg" alt="로고" className="h-8" />
-        </div>
-        {/* 나머지 사이드바 내용 */}
-        <nav className="mt-6">
-          <List sx={{ px: 2, py: 2 }}>
-            {menuItems.map((item, index) => (
-              <ListItemButton
-                key={item.text}
-                selected={selectedIndex === index}
-                onClick={() => {
-                  setSelectedIndex(index);
-                  navigate(item.path);
-                }}
-                sx={{
-                  mb: 0.5,
-                  borderRadius: '8px',
-                  '&.Mui-selected': {
-                    bgcolor: theme.palette.primary.main,
-                    '&:hover': {
-                      bgcolor: theme.palette.primary.dark,
-                    },
-                    '& .MuiListItemIcon-root': {
-                      color: '#FFFFFF',
-                    },
-                    '& .MuiTypography-root': {
-                      color: '#FFFFFF',
-                      fontWeight: 600,
-                    },
+    <Box sx={{ display: 'flex', height: '100vh', bgcolor: '#F8FAFC' }}>
+      {/* Sidebar */}
+      <Box
+        sx={{
+          width: 240,
+          bgcolor: 'white',
+          borderRight: '1px solid',
+          borderColor: 'grey.200',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        {/* Logo */}
+        <Box
+          sx={{
+            height: 64,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderBottom: '1px solid',
+            borderColor: 'grey.200',
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 700,
+              color: 'primary.main',
+              letterSpacing: '-0.5px',
+            }}
+          >
+            xDataRoom
+          </Typography>
+        </Box>
+
+        {/* Menu */}
+        <List sx={{ px: 2, py: 2, flex: 1 }}>
+          {menuItems.map((item, index) => (
+            <ListItemButton
+              key={item.text}
+              selected={selectedIndex === index}
+              onClick={() => {
+                setSelectedIndex(index);
+                navigate(item.path);
+              }}
+              sx={{
+                mb: 0.5,
+                borderRadius: 1,
+                '&.Mui-selected': {
+                  bgcolor: 'primary.50',
+                  '&:hover': {
+                    bgcolor: 'primary.100',
                   },
+                  '& .MuiListItemIcon-root': {
+                    color: 'primary.main',
+                  },
+                  '& .MuiTypography-root': {
+                    color: 'primary.main',
+                    fontWeight: 600,
+                  },
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 40,
+                  color: selectedIndex === index ? 'primary.main' : 'grey.600',
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    color:
-                      selectedIndex === index ? '#FFFFFF' : 'text.secondary',
-                    minWidth: 40,
-                  }}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  primaryTypographyProps={{
-                    fontSize: '0.875rem',
-                    fontWeight: selectedIndex === index ? 600 : 500,
-                  }}
-                />
-              </ListItemButton>
-            ))}
-          </List>
-        </nav>
-      </div>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText
+                primary={item.text}
+                primaryTypographyProps={{
+                  fontSize: '0.875rem',
+                  fontWeight: selectedIndex === index ? 600 : 500,
+                  color: selectedIndex === index ? 'primary.main' : 'grey.700',
+                }}
+              />
+            </ListItemButton>
+          ))}
+        </List>
+      </Box>
 
-      {/* 메인 콘텐츠 영역 */}
-      <div className="flex-1 flex flex-col">
-        <header className="h-16 bg-white border-b flex items-center px-6">
-          <h1 className="text-xl font-semibold">대시보드</h1>
-        </header>
-        <main className="flex-1 p-6 bg-gray-50 overflow-auto">
+      {/* Main Content */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        {/* Header */}
+        <Box
+          sx={{
+            height: 64,
+            bgcolor: 'white',
+            borderBottom: '1px solid',
+            borderColor: 'grey.200',
+            display: 'flex',
+            alignItems: 'center',
+            px: 3,
+            justifyContent: 'space-between',
+          }}
+        >
+          {/* Search Bar */}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              bgcolor: 'grey.100',
+              borderRadius: 1,
+              px: 2,
+              flex: 1,
+              maxWidth: 480,
+              mx: 'auto',
+            }}
+          >
+            <SearchIcon sx={{ color: 'grey.500', mr: 1 }} />
+            <InputBase
+              placeholder="Search documents, portfolios..."
+              sx={{ flex: 1 }}
+            />
+          </Box>
+
+          {/* Right Section */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <IconButton size="small">
+              <Badge badgeContent={3} color="error">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                cursor: 'pointer',
+              }}
+            >
+              <Avatar
+                sx={{ width: 32, height: 32 }}
+                alt="User Name"
+                src="/user-avatar.jpg"
+              />
+              <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                John Doe
+              </Typography>
+              <KeyboardArrowDownIcon sx={{ color: 'grey.500' }} />
+            </Box>
+          </Box>
+        </Box>
+
+        {/* Page Content */}
+        <Box sx={{ flex: 1, overflow: 'auto', p: 3 }}>
           <Outlet />
-        </main>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 };
