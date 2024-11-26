@@ -8,9 +8,15 @@ import {
   useTheme,
   alpha,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export const HeroSection: React.FC = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const handleStartTrial = () => {
+    navigate('/dashboard');
+  };
 
   return (
     <Box
@@ -145,6 +151,7 @@ export const HeroSection: React.FC = () => {
                   },
                   transition: 'all 0.3s ease-in-out',
                 }}
+                onClick={handleStartTrial}
               >
                 Start Free Trial
               </Button>

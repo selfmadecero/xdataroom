@@ -12,7 +12,11 @@ import {
 } from '@mui/material';
 import { useApp } from '../context/AppContext';
 
-export const CompanyList: React.FC = () => {
+interface CompanyListProps {
+  limit?: number;
+}
+
+export const CompanyList: React.FC<CompanyListProps> = ({ limit }) => {
   const { companies } = useApp();
   const navigate = useNavigate();
 
