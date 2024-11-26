@@ -21,7 +21,7 @@ export const HeroSection: React.FC = () => {
         alignItems: 'center',
         background: `radial-gradient(circle at 50% 50%, 
           ${alpha(theme.palette.primary.dark, 0.97)} 0%,
-          ${alpha('#000', 0.95)} 100%)`,
+          ${alpha('#000', 0.98)} 100%)`,
         position: 'relative',
         overflow: 'hidden',
         '&::before': {

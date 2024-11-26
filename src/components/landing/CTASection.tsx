@@ -16,10 +16,8 @@ export const CTASection: React.FC = () => {
     <Box
       id="cta"
       sx={{
-        py: { xs: 12, md: 16, lg: 20 },
-        background: `linear-gradient(180deg, 
-          ${alpha('#000', 0.95)} 0%,
-          ${alpha(theme.palette.primary.dark, 0.98)} 100%)`,
+        py: { xs: 8, sm: 10, md: 12 },
+        background: alpha('#000', 0.98),
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -31,16 +29,16 @@ export const CTASection: React.FC = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          opacity: 0.3,
+          opacity: 0.2,
           background: `
-            radial-gradient(circle at 70% 30%, 
-              ${alpha(theme.palette.primary.main, 0.4)} 0%, 
-              transparent 50%),
-            radial-gradient(circle at 30% 70%, 
-              ${alpha(theme.palette.primary.dark, 0.3)} 0%, 
-              transparent 50%)
+            radial-gradient(80% 80% at 50% 50%, 
+              ${alpha(theme.palette.primary.dark, 0.25)} 0%, 
+              transparent 100%),
+            radial-gradient(50% 50% at 50% 0%, 
+              ${alpha(theme.palette.primary.dark, 0.2)} 0%, 
+              transparent 100%)
           `,
-          filter: 'blur(60px)',
+          filter: 'blur(100px)',
         }}
       />
 

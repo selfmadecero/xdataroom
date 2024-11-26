@@ -56,47 +56,12 @@ export const Footer: React.FC = () => {
     <Box
       component="footer"
       sx={{
-        py: { xs: 6, md: 8 },
-        background: `linear-gradient(180deg, 
-          ${alpha(theme.palette.primary.dark, 0.98)} 0%,
-          ${alpha('#000', 0.98)} 100%)`,
+        py: { xs: 6, sm: 8, md: 10 },
+        background: alpha('#000', 0.98),
         position: 'relative',
         overflow: 'hidden',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '1px',
-          background: `linear-gradient(90deg, 
-            transparent 0%,
-            ${alpha('#fff', 0.1)} 50%,
-            transparent 100%
-          )`,
-        },
       }}
     >
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          opacity: 0.3,
-          background: `
-            radial-gradient(circle at 20% 20%, 
-              ${alpha(theme.palette.primary.dark, 0.4)} 0%, 
-              transparent 50%),
-            radial-gradient(circle at 80% 80%, 
-              ${alpha(theme.palette.primary.dark, 0.3)} 0%, 
-              transparent 50%)
-          `,
-          filter: 'blur(60px)',
-        }}
-      />
-
       <Container maxWidth="lg">
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>

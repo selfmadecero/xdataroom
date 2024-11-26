@@ -12,9 +12,13 @@ import {
   useScrollTrigger,
   Menu,
   MenuItem,
+  Drawer,
+  Stack,
+  Link,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import CloseIcon from '@mui/icons-material/Close';
 
 const navItems = [
   { label: 'Features', href: '#features' },
@@ -25,74 +29,33 @@ const navItems = [
 ];
 
 export const Header: React.FC = () => {
-  const theme = useTheme();
-  const [mobileMenuAnchor, setMobileMenuAnchor] = useState<null | HTMLElement>(
-    null
-  );
   const [isScrolled, setIsScrolled] = useState(false);
-
-  const scrollTrigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 100,
-  });
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const theme = useTheme();
 
   useEffect(() => {
-    setIsScrolled(scrollTrigger);
-  }, [scrollTrigger]);
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setIsScrolled(scrollPosition > 50);
+    };
 
-  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMobileMenuAnchor(event.currentTarget);
-  };
-
-  const handleMobileMenuClose = () => {
-    setMobileMenuAnchor(null);
-  };
-
-  const handleScrollToSection = (
-    event: React.MouseEvent<HTMLAnchorElement>
-  ) => {
-    event.preventDefault();
-    const href = event.currentTarget.getAttribute('href');
-    if (!href) return;
-
-    const element = document.querySelector(href);
-    if (element) {
-      const offsetTop =
-        element.getBoundingClientRect().top + window.pageYOffset;
-      window.scrollTo({
-        top: offsetTop - 80, // 헤더 높이만큼 오프셋
-        behavior: 'smooth',
-      });
-    }
-    handleMobileMenuClose();
-  };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <AppBar
       position="fixed"
-      elevation={0}
       sx={{
         background: isScrolled
-          ? `linear-gradient(to bottom, 
-              ${alpha('#000', 0.95)} 0%, 
-              ${alpha('#000', 0.9)} 100%)`
+          ? `linear-gradient(to bottom, ${alpha('#000', 0.95)}, ${alpha(
+              '#000',
+              0.9
+            )})`
           : 'transparent',
         backdropFilter: isScrolled ? 'blur(10px)' : 'none',
+        boxShadow: 'none',
         transition: 'all 0.3s ease-in-out',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: '1px',
-          opacity: isScrolled ? 1 : 0,
-          background: `linear-gradient(90deg, 
-            transparent 0%,
-            ${alpha(theme.palette.primary.main, 0.1)} 50%,
-            transparent 100%
-          )`,
-        },
       }}
     >
       <Container maxWidth="lg">
@@ -106,7 +69,6 @@ export const Header: React.FC = () => {
             variant="h6"
             component="a"
             href="#hero"
-            onClick={handleScrollToSection}
             sx={{
               fontSize: { xs: '1.5rem', md: '1.8rem' },
               fontWeight: 800,
@@ -133,7 +95,6 @@ export const Header: React.FC = () => {
               <Button
                 key={item.label}
                 href={item.href}
-                onClick={handleScrollToSection}
                 sx={{
                   color: 'grey.300',
                   fontSize: '1rem',
@@ -152,7 +113,6 @@ export const Header: React.FC = () => {
               variant="contained"
               endIcon={<ArrowForwardIcon />}
               href="#cta"
-              onClick={handleScrollToSection}
               sx={{
                 ml: 2,
                 px: 3,
@@ -183,71 +143,124 @@ export const Header: React.FC = () => {
               display: { xs: 'flex', md: 'none' },
               color: 'white',
             }}
-            onClick={handleMobileMenuOpen}
+            onClick={() => setMobileMenuOpen(true)}
           >
             <MenuIcon />
           </IconButton>
 
-          <Menu
-            anchorEl={mobileMenuAnchor}
-            open={Boolean(mobileMenuAnchor)}
-            onClose={handleMobileMenuClose}
-            sx={{
-              '& .MuiPaper-root': {
-                background: `linear-gradient(135deg, 
+          <Drawer
+            anchor="right"
+            open={mobileMenuOpen}
+            onClose={() => setMobileMenuOpen(false)}
+            PaperProps={{
+              sx: {
+                width: '100%',
+                maxWidth: '360px',
+                background: `linear-gradient(130deg, 
                   ${alpha('#000', 0.95)} 0%, 
-                  ${alpha(theme.palette.primary.dark, 0.95)} 100%)`,
-                backdropFilter: 'blur(10px)',
-                border: `1px solid ${alpha('#fff', 0.1)}`,
-                borderRadius: '12px',
-                mt: 1,
+                  ${alpha(theme.palette.primary.dark, 0.9)} 100%)`,
+                backdropFilter: 'blur(20px)',
+                px: 3,
+                py: 4,
               },
             }}
           >
-            {navItems.map((item) => (
-              <MenuItem
-                key={item.label}
-                onClick={(e) => {
-                  const event = {
-                    preventDefault: () => {},
-                    currentTarget: {
-                      getAttribute: () => item.href,
-                    },
-                  } as any;
-                  handleScrollToSection(event);
-                }}
-                sx={{
-                  color: 'grey.300',
-                  '&:hover': {
-                    background: alpha(theme.palette.primary.main, 0.1),
+            <Box
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                opacity: 0.1,
+                background: `
+                  radial-gradient(circle at 70% 30%, 
+                    ${alpha(theme.palette.primary.dark, 0.4)} 0%, 
+                    transparent 70%),
+                  radial-gradient(circle at 30% 70%, 
+                    ${alpha(theme.palette.primary.dark, 0.4)} 0%, 
+                    transparent 70%)
+                `,
+                filter: 'blur(60px)',
+              }}
+            />
+
+            <Stack spacing={4} sx={{ position: 'relative', zIndex: 1 }}>
+              <Box sx={{ textAlign: 'right' }}>
+                <IconButton
+                  onClick={() => setMobileMenuOpen(false)}
+                  sx={{
                     color: 'white',
+                    '&:hover': {
+                      background: alpha('#fff', 0.1),
+                    },
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+
+              {navItems.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  sx={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    py: 1.5,
+                    px: 2,
+                    fontSize: '1.1rem',
+                    fontWeight: 500,
+                    borderRadius: '12px',
+                    background: `linear-gradient(135deg, 
+                      ${alpha('#fff', 0.05)} 0%, 
+                      ${alpha('#fff', 0.02)} 100%)`,
+                    backdropFilter: 'blur(10px)',
+                    border: `1px solid ${alpha('#fff', 0.1)}`,
+                    transition: 'all 0.2s ease-in-out',
+                    '&:hover': {
+                      background: `linear-gradient(135deg, 
+                        ${alpha('#fff', 0.08)} 0%, 
+                        ${alpha('#fff', 0.03)} 100%)`,
+                      transform: 'translateY(-2px)',
+                      boxShadow: `0 8px 20px -6px ${alpha(
+                        theme.palette.primary.main,
+                        0.5
+                      )}`,
+                    },
+                  }}
+                >
+                  {item.label}
+                </Link>
+              ))}
+
+              <Button
+                variant="contained"
+                size="large"
+                sx={{
+                  mt: 2,
+                  py: 1.5,
+                  borderRadius: '12px',
+                  background: `linear-gradient(135deg, 
+                    ${theme.palette.primary.main} 0%, 
+                    ${theme.palette.primary.dark} 100%)`,
+                  fontSize: '1.1rem',
+                  fontWeight: 600,
+                  transition: 'all 0.3s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: `0 8px 25px -5px ${alpha(
+                      theme.palette.primary.main,
+                      0.5
+                    )}`,
                   },
                 }}
               >
-                <Typography>{item.label}</Typography>
-              </MenuItem>
-            ))}
-            <MenuItem
-              onClick={(e) => {
-                const event = {
-                  preventDefault: () => {},
-                  currentTarget: {
-                    getAttribute: () => '#cta',
-                  },
-                } as any;
-                handleScrollToSection(event);
-              }}
-              sx={{
-                color: theme.palette.primary.main,
-                fontWeight: 600,
-                '&:hover': {
-                  background: alpha(theme.palette.primary.main, 0.1),
-                },
-              }}
-            >
-              Request Demo
-            </MenuItem>
-          </Menu>
+                Get Started
+              </Button>
+            </Stack>
+          </Drawer>
         </Toolbar>
       </Container>
     </AppBar>

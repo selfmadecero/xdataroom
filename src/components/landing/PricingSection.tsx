@@ -12,6 +12,7 @@ import {
   ListItemText,
   alpha,
   useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
@@ -67,12 +68,15 @@ const plans = [
 
 export const PricingSection: React.FC = () => {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
     <Box
       id="pricing"
       sx={{
-        py: { xs: 12, md: 16, lg: 20 },
+        py: { xs: 8, sm: 10, md: 16, lg: 20 },
+        px: { xs: 2, sm: 3, md: 4 },
         background: `linear-gradient(180deg, 
           ${alpha(theme.palette.primary.dark, 0.95)} 0%,
           ${alpha('#000', 0.97)} 100%)`,
@@ -81,17 +85,23 @@ export const PricingSection: React.FC = () => {
       }}
     >
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
-        <Box sx={{ textAlign: 'center', mb: { xs: 8, md: 12 } }}>
+        <Box sx={{ textAlign: 'center', mb: { xs: 5, sm: 6, md: 8, lg: 10 } }}>
           <Typography
             variant="h2"
             sx={{
-              fontSize: { xs: '2rem', md: '3rem', lg: '3.5rem' },
+              fontSize: {
+                xs: '1.75rem',
+                sm: '2.25rem',
+                md: '3rem',
+                lg: '3.5rem',
+              },
               fontWeight: 800,
               background: 'linear-gradient(to right, #FFFFFF 20%, #94A3B8 80%)',
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               color: 'transparent',
               mb: 2,
+              lineHeight: { xs: 1.3, md: 1.2 },
             }}
           >
             Simple, Transparent Pricing
@@ -99,37 +109,52 @@ export const PricingSection: React.FC = () => {
           <Typography
             sx={{
               color: '#9E9E9E',
-              fontSize: { xs: '1rem', md: '1.2rem' },
+              fontSize: { xs: '0.95rem', sm: '1rem', md: '1.2rem' },
               maxWidth: '600px',
               mx: 'auto',
+              px: { xs: 2, sm: 0 },
+              lineHeight: { xs: 1.5, md: 1.6 },
             }}
           >
             Choose the perfect plan for your investment firm
           </Typography>
         </Box>
 
-        <Grid container spacing={4} alignItems="center">
+        <Grid
+          container
+          spacing={{ xs: 3, sm: 4, md: 4 }}
+          alignItems="center"
+          sx={{
+            px: { xs: 1, sm: 2, md: 0 },
+          }}
+        >
           {plans.map((plan) => (
-            <Grid item xs={12} md={4} key={plan.name}>
+            <Grid item xs={12} sm={6} md={4} key={plan.name}>
               <Card
                 sx={{
                   background: `linear-gradient(135deg, 
                     ${alpha('#fff', plan.isPopular ? 0.1 : 0.05)} 0%, 
                     ${alpha('#fff', plan.isPopular ? 0.05 : 0.02)} 100%)`,
                   backdropFilter: 'blur(20px)',
-                  borderRadius: '24px',
+                  borderRadius: { xs: '20px', md: '24px' },
                   border: `1px solid ${alpha(
                     '#fff',
                     plan.isPopular ? 0.15 : 0.1
                   )}`,
-                  p: 4,
+                  p: { xs: 3, sm: 3.5, md: 4 },
                   height: '100%',
                   position: 'relative',
                   overflow: 'hidden',
                   transition: 'all 0.3s ease-out',
-                  transform: plan.isPopular ? 'scale(1.05)' : 'none',
+                  transform: {
+                    xs: 'none',
+                    md: plan.isPopular ? 'scale(1.05)' : 'none',
+                  },
                   '&:hover': {
-                    transform: plan.isPopular ? 'scale(1.05)' : 'scale(1.02)',
+                    transform: {
+                      xs: 'scale(1.02)',
+                      md: plan.isPopular ? 'scale(1.05)' : 'scale(1.02)',
+                    },
                     background: `linear-gradient(135deg, 
                       ${alpha('#fff', plan.isPopular ? 0.12 : 0.07)} 0%, 
                       ${alpha('#fff', plan.isPopular ? 0.07 : 0.04)} 100%)`,
@@ -140,14 +165,14 @@ export const PricingSection: React.FC = () => {
                   <Box
                     sx={{
                       position: 'absolute',
-                      top: 20,
-                      right: -35,
+                      top: { xs: 16, md: 20 },
+                      right: { xs: -30, md: -35 },
                       transform: 'rotate(45deg)',
                       background: theme.palette.primary.main,
                       color: 'white',
-                      px: 4,
+                      px: { xs: 3, md: 4 },
                       py: 0.5,
-                      fontSize: '0.875rem',
+                      fontSize: { xs: '0.8rem', md: '0.875rem' },
                       fontWeight: 500,
                     }}
                   >
@@ -156,7 +181,12 @@ export const PricingSection: React.FC = () => {
                 )}
                 <Typography
                   variant="h5"
-                  sx={{ color: 'white', fontWeight: 700, mb: 1 }}
+                  sx={{
+                    color: 'white',
+                    fontWeight: 700,
+                    mb: 1,
+                    fontSize: { xs: '1.25rem', md: '1.5rem' },
+                  }}
                 >
                   {plan.name}
                 </Typography>
@@ -168,27 +198,40 @@ export const PricingSection: React.FC = () => {
                     mb: 1,
                     display: 'flex',
                     alignItems: 'baseline',
+                    fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
                   }}
                 >
                   {plan.price}
                   <Typography
                     component="span"
-                    sx={{ color: '#9E9E9E', ml: 1, fontSize: '1rem' }}
+                    sx={{
+                      color: '#9E9E9E',
+                      ml: 1,
+                      fontSize: { xs: '0.875rem', md: '1rem' },
+                    }}
                   >
                     /{plan.period}
                   </Typography>
                 </Typography>
-                <Typography sx={{ color: '#9E9E9E', mb: 4, minHeight: '48px' }}>
+                <Typography
+                  sx={{
+                    color: '#9E9E9E',
+                    mb: 4,
+                    minHeight: { xs: 'auto', md: '48px' },
+                    fontSize: { xs: '0.875rem', md: '1rem' },
+                    lineHeight: { xs: 1.5, md: 1.6 },
+                  }}
+                >
                   {plan.description}
                 </Typography>
                 <Button
                   variant={plan.isPopular ? 'contained' : 'outlined'}
                   fullWidth
                   sx={{
-                    py: 1.5,
-                    mb: 4,
-                    borderRadius: '12px',
-                    fontSize: '1.1rem',
+                    py: { xs: 1.25, md: 1.5 },
+                    mb: { xs: 3, md: 4 },
+                    borderRadius: { xs: '10px', md: '12px' },
+                    fontSize: { xs: '1rem', md: '1.1rem' },
                     fontWeight: 600,
                     ...(plan.isPopular && {
                       background: `linear-gradient(135deg, 
@@ -201,19 +244,32 @@ export const PricingSection: React.FC = () => {
                 </Button>
                 <List disablePadding>
                   {plan.features.map((feature) => (
-                    <ListItem key={feature} disablePadding sx={{ mb: 2 }}>
-                      <ListItemIcon sx={{ minWidth: 40 }}>
+                    <ListItem
+                      key={feature}
+                      disablePadding
+                      sx={{
+                        mb: { xs: 1.5, md: 2 },
+                      }}
+                    >
+                      <ListItemIcon sx={{ minWidth: { xs: 35, md: 40 } }}>
                         <CheckCircleIcon
                           sx={{
                             color: plan.isPopular
                               ? theme.palette.primary.main
                               : 'white',
+                            fontSize: { xs: '1.25rem', md: '1.5rem' },
                           }}
                         />
                       </ListItemIcon>
                       <ListItemText
                         primary={feature}
-                        sx={{ color: '#E0E0E0' }}
+                        sx={{
+                          color: '#E0E0E0',
+                          '& .MuiListItemText-primary': {
+                            fontSize: { xs: '0.875rem', md: '1rem' },
+                            lineHeight: { xs: 1.5, md: 1.6 },
+                          },
+                        }}
                       />
                     </ListItem>
                   ))}

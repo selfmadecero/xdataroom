@@ -8,6 +8,7 @@ import {
   Avatar,
   alpha,
   useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 
@@ -37,21 +38,22 @@ const testimonials = [
 
 export const TestimonialsSection: React.FC = () => {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
     <Box
       id="testimonials"
       sx={{
-        py: { xs: 12, md: 16, lg: 20 },
-        background: `linear-gradient(180deg, 
-          ${alpha('#000', 0.98)} 0%,
-          ${alpha('#000', 0.95)} 20%,
-          ${alpha(theme.palette.primary.dark, 0.92)} 100%)`,
+        py: { xs: 8, sm: 10, md: 16, lg: 20 },
+        background: `linear-gradient(140deg, 
+          ${alpha('#000', 0.99)} 0%,
+          ${alpha('#0A0A0A', 0.98)} 50%,
+          ${alpha('#000', 0.99)} 100%)`,
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      {/* Enhanced Background Effects */}
       <Box
         sx={{
           position: 'absolute',
@@ -59,31 +61,47 @@ export const TestimonialsSection: React.FC = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          opacity: 0.3,
+          opacity: 0.1,
           background: `
-            radial-gradient(circle at 30% 20%, 
-              ${alpha(theme.palette.primary.dark, 0.4)} 0%, 
-              transparent 50%),
-            radial-gradient(circle at 70% 80%, 
-              ${alpha(theme.palette.primary.dark, 0.3)} 0%, 
-              transparent 50%)
+            radial-gradient(ellipse at 30% 50%, 
+              ${alpha(theme.palette.primary.dark, 0.2)} 0%, 
+              transparent 70%),
+            radial-gradient(circle at 70% 30%, 
+              ${alpha(theme.palette.primary.dark, 0.15)} 0%, 
+              transparent 70%)
           `,
-          filter: 'blur(50px)',
+          filter: 'blur(130px)',
         }}
       />
 
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
-        <Box sx={{ textAlign: 'center', mb: { xs: 8, md: 12 } }}>
+      <Container
+        maxWidth="lg"
+        sx={{
+          position: 'relative',
+          zIndex: 1,
+          px: { xs: 2, sm: 3, md: 4 },
+        }}
+      >
+        <Box sx={{ textAlign: 'center', mb: { xs: 5, sm: 6, md: 8, lg: 10 } }}>
           <Typography
             variant="h2"
             sx={{
-              fontSize: { xs: '2rem', md: '3rem', lg: '3.5rem' },
+              fontSize: {
+                xs: '1.75rem',
+                sm: '2.25rem',
+                md: '3rem',
+                lg: '3.5rem',
+              },
               fontWeight: 800,
+              lineHeight: { xs: 1.3, md: 1.2 },
+              maxWidth: { xs: '100%', sm: '80%', md: '100%' },
+              mx: 'auto',
               background: 'linear-gradient(to right, #FFFFFF 20%, #94A3B8 80%)',
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               color: 'transparent',
-              mb: 2,
+              mb: { xs: 2, md: 3 },
+              px: { xs: 2, sm: 0 },
             }}
           >
             Trusted by Industry Leaders
@@ -91,25 +109,35 @@ export const TestimonialsSection: React.FC = () => {
           <Typography
             sx={{
               color: '#9E9E9E',
-              fontSize: { xs: '1rem', md: '1.2rem' },
-              maxWidth: '600px',
+              fontSize: { xs: '0.95rem', sm: '1rem', md: '1.2rem' },
+              maxWidth: { xs: '100%', sm: '80%', md: '600px' },
               mx: 'auto',
+              lineHeight: { xs: 1.5, md: 1.6 },
+              px: { xs: 2, sm: 4, md: 0 },
             }}
           >
             See what top investment firms say about xDataRoom
           </Typography>
         </Box>
 
-        <Grid container spacing={4} alignItems="stretch">
+        <Grid
+          container
+          spacing={{ xs: 3, sm: 4, md: 4 }}
+          alignItems="stretch"
+          sx={{
+            px: { xs: 1, sm: 2, md: 0 },
+          }}
+        >
           {testimonials.map((testimonial, index) => (
             <Grid
               item
               xs={12}
+              sm={6}
               md={4}
               key={testimonial.name}
               sx={{
                 display: 'flex',
-                perspective: '2000px',
+                perspective: { xs: '1000px', md: '2000px' },
               }}
             >
               <Card
@@ -119,35 +147,44 @@ export const TestimonialsSection: React.FC = () => {
                     ${alpha('#fff', 0.08)} 0%, 
                     ${alpha('#fff', 0.03)} 100%)`,
                   backdropFilter: 'blur(20px)',
-                  borderRadius: '24px',
+                  borderRadius: { xs: '20px', md: '24px' },
                   border: `1px solid ${alpha('#fff', 0.12)}`,
-                  p: 4,
+                  p: { xs: 3, sm: 3.5, md: 4 },
                   position: 'relative',
                   overflow: 'visible',
                   transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
                   display: 'flex',
                   flexDirection: 'column',
                   '&:hover': {
-                    transform: 'translateY(-10px) translateZ(20px)',
+                    transform: {
+                      xs: 'translateY(-5px)',
+                      md: 'translateY(-10px) translateZ(20px)',
+                    },
                     background: `linear-gradient(135deg, 
                       ${alpha('#fff', 0.1)} 0%, 
                       ${alpha('#fff', 0.04)} 100%)`,
-                    boxShadow: `
-                      0 20px 40px -20px ${alpha(
+                    boxShadow: {
+                      xs: `0 15px 30px -10px ${alpha(
                         theme.palette.primary.main,
                         0.3
-                      )},
-                      0 0 20px 0 ${alpha(theme.palette.primary.main, 0.2)}
-                    `,
+                      )}`,
+                      md: `
+                        0 20px 40px -20px ${alpha(
+                          theme.palette.primary.main,
+                          0.3
+                        )},
+                        0 0 20px 0 ${alpha(theme.palette.primary.main, 0.2)}
+                      `,
+                    },
                     '& .quote-icon': {
-                      transform: 'translateY(-5px) rotateY(180deg)',
+                      transform: {
+                        xs: 'translateY(-3px)',
+                        md: 'translateY(-5px) rotateY(180deg)',
+                      },
                       background: theme.palette.primary.main,
                     },
                     '& .avatar-container': {
                       transform: 'scale(1.05)',
-                      '& .avatar': {
-                        borderColor: alpha(theme.palette.primary.main, 0.3),
-                      },
                     },
                   },
                 }}
@@ -156,14 +193,14 @@ export const TestimonialsSection: React.FC = () => {
                   className="quote-icon"
                   sx={{
                     position: 'absolute',
-                    top: -24,
-                    left: 32,
-                    width: '48px',
-                    height: '48px',
+                    top: { xs: -20, md: -24 },
+                    left: { xs: 24, md: 32 },
+                    width: { xs: '40px', md: '48px' },
+                    height: { xs: '40px', md: '48px' },
                     background: `linear-gradient(135deg, 
                       ${alpha(theme.palette.primary.main, 0.9)} 0%, 
                       ${alpha(theme.palette.primary.dark, 0.9)} 100%)`,
-                    borderRadius: '16px',
+                    borderRadius: { xs: '14px', md: '16px' },
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -175,13 +212,12 @@ export const TestimonialsSection: React.FC = () => {
                       )},
                       0 0 0 1px ${alpha(theme.palette.primary.main, 0.2)}
                     `,
-                    transform: 'translateY(0) rotateY(0)',
                   }}
                 >
                   <FormatQuoteIcon
                     sx={{
                       color: 'white',
-                      fontSize: '28px',
+                      fontSize: { xs: '24px', md: '28px' },
                       filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
                     }}
                   />
@@ -190,14 +226,14 @@ export const TestimonialsSection: React.FC = () => {
                 <Typography
                   sx={{
                     color: '#E0E0E0',
-                    fontSize: '1.1rem',
-                    lineHeight: 1.7,
+                    fontSize: { xs: '0.95rem', sm: '1rem', md: '1.1rem' },
+                    lineHeight: { xs: 1.6, md: 1.7 },
                     mb: 'auto',
                     fontStyle: 'italic',
                     position: 'relative',
                     textShadow: `0 2px 4px ${alpha('#000', 0.2)}`,
                     transition: 'all 0.3s ease-in-out',
-                    pb: 4,
+                    pb: { xs: 3, md: 4 },
                   }}
                 >
                   "{testimonial.comment}"
@@ -216,15 +252,14 @@ export const TestimonialsSection: React.FC = () => {
                     src={testimonial.avatar}
                     className="avatar"
                     sx={{
-                      width: 60,
-                      height: 60,
+                      width: { xs: 50, md: 60 },
+                      height: { xs: 50, md: 60 },
                       mr: 2,
                       border: `2px solid ${alpha('#fff', 0.2)}`,
                       boxShadow: `
                         0 8px 16px ${alpha('#000', 0.2)},
                         0 0 0 2px ${alpha(theme.palette.primary.main, 0.1)}
                       `,
-                      transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
                     }}
                   />
                   <Box>
@@ -233,7 +268,7 @@ export const TestimonialsSection: React.FC = () => {
                       sx={{
                         color: 'white',
                         fontWeight: 600,
-                        fontSize: '1.1rem',
+                        fontSize: { xs: '1rem', md: '1.1rem' },
                         textShadow: `0 2px 4px ${alpha('#000', 0.2)}`,
                         mb: 0.5,
                       }}
@@ -243,7 +278,7 @@ export const TestimonialsSection: React.FC = () => {
                     <Typography
                       sx={{
                         color: '#E0E0E0',
-                        fontSize: '0.9rem',
+                        fontSize: { xs: '0.8rem', md: '0.9rem' },
                         textShadow: `0 1px 2px ${alpha('#000', 0.2)}`,
                       }}
                     >
