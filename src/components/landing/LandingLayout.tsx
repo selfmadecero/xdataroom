@@ -1,39 +1,20 @@
 import React from 'react';
-import { Box, useTheme, useMediaQuery } from '@mui/material';
-import { Header } from '../layout/Header';
-import { HeroSection } from './HeroSection';
-import { FeaturesSection } from './FeaturesSection';
-import { HowItWorksSection } from './HowItWorksSection';
-import { TestimonialsSection } from './TestimonialsSection';
-import { PricingSection } from './PricingSection';
-import { FAQSection } from './FAQSection';
-import { CTASection } from './CTASection';
-import { Footer } from '../layout/Footer';
+import { Box } from '@mui/material';
 
-export const LandingLayout: React.FC = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+interface LandingLayoutProps {
+  children: React.ReactNode;
+}
 
+export const LandingLayout: React.FC<LandingLayoutProps> = ({ children }) => {
   return (
     <Box
       sx={{
-        '& > *': {
-          margin: 0,
-        },
-        display: 'flex',
-        flexDirection: 'column',
+        minHeight: '100vh',
+        bgcolor: '#000',
+        color: 'white',
       }}
     >
-      <Header />
-      <HeroSection />
-      <FeaturesSection />
-      <HowItWorksSection />
-      <TestimonialsSection />
-      <PricingSection />
-      <FAQSection />
-      <CTASection />
-      <Footer />
+      {children}
     </Box>
   );
 };

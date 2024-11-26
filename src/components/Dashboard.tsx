@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Grid,
@@ -23,9 +23,35 @@ import {
 import { DocumentRequestList } from './DocumentRequestList';
 import { CompanyList } from './CompanyList';
 import { PerformanceChart } from './PerformanceChart';
+import { PortfolioOverviewModal } from './modals/PortfolioOverviewModal';
+import { DocumentRequestModal } from './modals/DocumentRequestModal';
+import { DocumentLibraryModal } from './modals/DocumentLibraryModal';
+import { DeadlinesOverviewModal } from './modals/DeadlinesOverviewModal';
+import { AddPortfolioModal } from './modals/AddPortfolioModal';
+import { ActionModal } from './modals/ActionModal';
 
 export const Dashboard = () => {
   const userName = 'John';
+  const [portfolioModalOpen, setPortfolioModalOpen] = useState(false);
+  const [selectedPortfolio, setSelectedPortfolio] = useState(null);
+  const [documentRequestModalOpen, setDocumentRequestModalOpen] =
+    useState(false);
+  const [documentLibraryModalOpen, setDocumentLibraryModalOpen] =
+    useState(false);
+  const [deadlinesModalOpen, setDeadlinesModalOpen] = useState(false);
+  const [addPortfolioModalOpen, setAddPortfolioModalOpen] = useState(false);
+  const [actionModalOpen, setActionModalOpen] = useState(false);
+  const [selectedAction, setSelectedAction] = useState<any>(null);
+
+  const handlePortfolioClick = (portfolio: any) => {
+    setSelectedPortfolio(portfolio);
+    setPortfolioModalOpen(true);
+  };
+
+  const handleActionClick = (action: any) => {
+    setSelectedAction(action);
+    setActionModalOpen(true);
+  };
 
   return (
     <Box>
@@ -106,6 +132,7 @@ export const Dashboard = () => {
                   size="small"
                   startIcon={<AddIcon />}
                   sx={{ textTransform: 'none' }}
+                  onClick={() => setAddPortfolioModalOpen(true)}
                 >
                   Add Portfolio
                 </Button>
@@ -140,6 +167,7 @@ export const Dashboard = () => {
                   size="small"
                   startIcon={<AddIcon />}
                   sx={{ textTransform: 'none' }}
+                  onClick={() => setDocumentRequestModalOpen(true)}
                 >
                   New Request
                 </Button>
@@ -196,6 +224,16 @@ export const Dashboard = () => {
                     variant="outlined"
                     size="small"
                     sx={{ textTransform: 'none' }}
+                    onClick={() =>
+                      handleActionClick({
+                        title: 'Request Quarterly Financials',
+                        description:
+                          'Quarterly financial statements are due from ABC Corp. Previous submissions have been on time.',
+                        type: 'document_request',
+                        company: 'ABC Corp',
+                        dueDate: '2024-04-05',
+                      })
+                    }
                   >
                     Take Action
                   </Button>
@@ -210,6 +248,16 @@ export const Dashboard = () => {
                     variant="outlined"
                     size="small"
                     sx={{ textTransform: 'none' }}
+                    onClick={() =>
+                      handleActionClick({
+                        title: 'Follow Up on Overdue Documents',
+                        description:
+                          'Multiple documents are overdue from XYZ Inc. Last follow-up was sent 5 days ago.',
+                        type: 'follow_up',
+                        company: 'XYZ Inc',
+                        status: '3 days overdue',
+                      })
+                    }
                   >
                     Take Action
                   </Button>
@@ -219,6 +267,37 @@ export const Dashboard = () => {
           </Card>
         </Grid>
       </Grid>
+
+      {selectedPortfolio && (
+        <PortfolioOverviewModal
+          open={portfolioModalOpen}
+          onClose={() => setPortfolioModalOpen(false)}
+          portfolio={selectedPortfolio}
+        />
+      )}
+      <DocumentRequestModal
+        open={documentRequestModalOpen}
+        onClose={() => setDocumentRequestModalOpen(false)}
+      />
+      <DocumentLibraryModal
+        open={documentLibraryModalOpen}
+        onClose={() => setDocumentLibraryModalOpen(false)}
+      />
+      <DeadlinesOverviewModal
+        open={deadlinesModalOpen}
+        onClose={() => setDeadlinesModalOpen(false)}
+      />
+      <AddPortfolioModal
+        open={addPortfolioModalOpen}
+        onClose={() => setAddPortfolioModalOpen(false)}
+      />
+      {selectedAction && (
+        <ActionModal
+          open={actionModalOpen}
+          onClose={() => setActionModalOpen(false)}
+          action={selectedAction}
+        />
+      )}
     </Box>
   );
 };

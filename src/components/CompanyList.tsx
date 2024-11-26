@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   List,
@@ -11,12 +11,16 @@ import {
   Typography,
   LinearProgress,
 } from '@mui/material';
+import { CompanyDetailModal } from './modals/CompanyDetailModal';
 
 interface CompanyListProps {
   limit?: number;
 }
 
 export const CompanyList: React.FC<CompanyListProps> = ({ limit }) => {
+  const [selectedCompany, setSelectedCompany] = useState<any>(null);
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
+
   const companies = [
     {
       id: 1,
@@ -68,58 +72,75 @@ export const CompanyList: React.FC<CompanyListProps> = ({ limit }) => {
     }
   };
 
+  const handleCompanyClick = (company: any) => {
+    setSelectedCompany(company);
+    setDetailModalOpen(true);
+  };
+
   return (
-    <List>
-      {companies.slice(0, limit).map((company, index) => (
-        <React.Fragment key={company.id}>
-          <ListItem
-            sx={{ py: 2, cursor: 'pointer' }}
-            onClick={() => navigate(`/portfolio/${company.id}`)}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-              <Avatar
-                sx={{ width: 40, height: 40, mr: 2, bgcolor: 'primary.main' }}
+    <>
+      <List>
+        {companies.slice(0, limit).map((company, index) => (
+          <React.Fragment key={company.id}>
+            <ListItem
+              sx={{ py: 2, cursor: 'pointer' }}
+              onClick={() => handleCompanyClick(company)}
+            >
+              <Box
+                sx={{ display: 'flex', alignItems: 'center', width: '100%' }}
               >
-                {company.name[0]}
-              </Avatar>
-              <Box sx={{ flex: 1 }}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    mb: 1,
-                  }}
+                <Avatar
+                  sx={{ width: 40, height: 40, mr: 2, bgcolor: 'primary.main' }}
                 >
-                  <Typography variant="subtitle2">{company.name}</Typography>
-                  <Chip
-                    label={getStatusInfo(company.status).label}
-                    color={getStatusInfo(company.status).color}
-                    size="small"
-                  />
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <LinearProgress
-                    variant="determinate"
-                    value={company.documentProgress}
-                    sx={{ flex: 1, height: 6, borderRadius: 3 }}
-                  />
-                  <Typography variant="caption" color="text.secondary">
-                    {company.documentProgress}% complete
+                  {company.name[0]}
+                </Avatar>
+                <Box sx={{ flex: 1 }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      mb: 1,
+                    }}
+                  >
+                    <Typography variant="subtitle2">{company.name}</Typography>
+                    <Chip
+                      label={getStatusInfo(company.status).label}
+                      color={getStatusInfo(company.status).color}
+                      size="small"
+                    />
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <LinearProgress
+                      variant="determinate"
+                      value={company.documentProgress}
+                      sx={{ flex: 1, height: 6, borderRadius: 3 }}
+                    />
+                    <Typography variant="caption" color="text.secondary">
+                      {company.documentProgress}% complete
+                    </Typography>
+                  </Box>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mt: 0.5 }}
+                  >
+                    {company.pendingRequests} pending requests
                   </Typography>
                 </Box>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mt: 0.5 }}
-                >
-                  {company.pendingRequests} pending requests
-                </Typography>
               </Box>
-            </Box>
-          </ListItem>
-          {index < (limit || companies.length) - 1 && <Divider />}
-        </React.Fragment>
-      ))}
-    </List>
+            </ListItem>
+            {index < (limit || companies.length) - 1 && <Divider />}
+          </React.Fragment>
+        ))}
+      </List>
+
+      {selectedCompany && (
+        <CompanyDetailModal
+          open={detailModalOpen}
+          onClose={() => setDetailModalOpen(false)}
+          company={selectedCompany}
+        />
+      )}
+    </>
   );
 };

@@ -1,213 +1,161 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   AppBar,
+  Box,
+  Button,
+  Container,
+  IconButton,
   Toolbar,
   Typography,
-  Button,
-  Box,
-  Container,
-  useScrollTrigger,
   alpha,
-  IconButton,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import MobileMenu from './MobileMenu';
 
-const menuItems = [
+const navItems = [
   { label: 'Features', href: '#features' },
-  { label: 'How It Works', href: '#how-it-works' },
+  { label: 'How it Works', href: '#how-it-works' },
+  { label: 'Testimonials', href: '#testimonials' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'About Us', href: '#about' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'FAQ', href: '#faq' },
 ];
 
 export const LandingHeader: React.FC = () => {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 0,
-  });
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const theme = useTheme();
+  const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setIsScrolled(scrollPosition > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <>
-      <AppBar
-        position="fixed"
-        elevation={0}
-        sx={{
-          backgroundColor: trigger ? 'rgba(0, 0, 0, 0.8)' : 'transparent',
-          backdropFilter: trigger ? 'blur(20px)' : 'none',
-          transition: 'all 0.3s ease-in-out',
-          borderBottom: trigger
-            ? `1px solid rgba(255, 255, 255, 0.1)`
-            : '1px solid transparent',
-        }}
-      >
-        <Container maxWidth="lg">
-          <Toolbar
-            disableGutters
+    <AppBar
+      position="fixed"
+      sx={{
+        background: isScrolled
+          ? `linear-gradient(to bottom, ${alpha('#000', 0.95)}, ${alpha(
+              '#000',
+              0.9
+            )})`
+          : 'transparent',
+        backdropFilter: isScrolled ? 'blur(10px)' : 'none',
+        boxShadow: 'none',
+        transition: 'all 0.3s ease-in-out',
+      }}
+    >
+      <Container maxWidth="lg">
+        <Toolbar
+          sx={{
+            py: { xs: 1, md: 1.5 },
+            justifyContent: 'space-between',
+          }}
+        >
+          <Typography
+            variant="h6"
+            component="a"
+            href="#hero"
             sx={{
-              height: trigger ? '70px' : '80px',
-              transition: 'height 0.3s ease',
+              fontSize: { xs: '1.3rem', sm: '1.5rem', md: '1.8rem' },
+              fontWeight: 800,
+              background: 'linear-gradient(to right, #FFFFFF 20%, #94A3B8 80%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+              textDecoration: 'none',
+              cursor: 'pointer',
             }}
           >
-            <Typography
-              variant="h5"
-              component={RouterLink}
-              to="/"
-              sx={{
-                textDecoration: 'none',
-                fontWeight: 700,
-                letterSpacing: '-0.02em',
-                background: trigger
-                  ? 'none'
-                  : 'linear-gradient(to right, #FFFFFF 20%, #94A3B8 80%)',
-                backgroundClip: trigger ? 'none' : 'text',
-                WebkitBackgroundClip: trigger ? 'none' : 'text',
-                color: trigger ? 'white' : 'transparent',
-                transition: 'all 0.3s ease',
-                mr: 3,
-              }}
-            >
-              xDataRoom
-            </Typography>
+            xDataRoom
+          </Typography>
 
-            {/* Desktop Menu */}
+          {/* Desktop & Tablet Navigation */}
+          {!isMobile && (
             <Box
               sx={{
-                flexGrow: 1,
-                display: { xs: 'none', md: 'flex' },
-                justifyContent: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                gap: { sm: 2, md: 4 },
               }}
             >
-              {menuItems.map((item) => (
-                <Button
-                  key={item.label}
-                  component="a"
-                  href={item.href}
-                  sx={{
-                    mx: 1,
-                    color: 'white',
-                    opacity: 0.8,
-                    fontSize: '0.95rem',
-                    fontWeight: 500,
-                    '&:hover': {
-                      opacity: 1,
-                      backgroundColor: alpha('#fff', 0.1),
-                    },
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  {item.label}
-                </Button>
-              ))}
-            </Box>
-
-            {/* Mobile Menu Button */}
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                edge="start"
-                onClick={handleDrawerToggle}
-                sx={{ ml: 'auto' }}
-              >
-                <MenuIcon />
-              </IconButton>
-            </Box>
-
-            <Button
-              variant="contained"
-              sx={{
-                display: { xs: 'none', sm: 'inline-flex' },
-                borderRadius: '12px',
-                px: 3,
-                py: 1,
-                background: `linear-gradient(135deg, 
-                  ${alpha('#fff', 0.2)} 0%, 
-                  ${alpha('#fff', 0.1)} 100%)`,
-                backdropFilter: 'blur(10px)',
-                border: `1px solid ${alpha('#fff', 0.2)}`,
-                color: 'white',
-                fontWeight: 600,
-                '&:hover': {
-                  background: `linear-gradient(135deg, 
-                    ${alpha('#fff', 0.3)} 0%, 
-                    ${alpha('#fff', 0.2)} 100%)`,
-                  transform: 'translateY(-2px)',
-                },
-                transition: 'all 0.2s ease',
-              }}
-            >
-              Get Started
-            </Button>
-          </Toolbar>
-        </Container>
-      </AppBar>
-
-      {/* Mobile Menu Drawer */}
-      <Drawer
-        variant="temporary"
-        anchor="right"
-        open={mobileOpen}
-        onClose={handleDrawerToggle}
-        ModalProps={{
-          keepMounted: true, // Better mobile performance
-        }}
-        sx={{
-          display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': {
-            width: 240,
-            backgroundColor: alpha('#000', 0.95),
-            backdropFilter: 'blur(20px)',
-          },
-        }}
-      >
-        <Box sx={{ pt: 8, px: 2 }}>
-          <List>
-            {menuItems.map((item) => (
-              <ListItem
-                key={item.label}
-                component="a"
-                href={item.href}
-                onClick={handleDrawerToggle}
+              {!isTablet &&
+                navItems.map((item) => (
+                  <Button
+                    key={item.label}
+                    href={item.href}
+                    sx={{
+                      color: 'grey.300',
+                      fontSize: { sm: '0.9rem', md: '1rem' },
+                      fontWeight: 500,
+                      transition: 'all 0.2s ease-in-out',
+                      '&:hover': {
+                        color: 'white',
+                        transform: 'translateY(-1px)',
+                      },
+                    }}
+                  >
+                    {item.label}
+                  </Button>
+                ))}
+              <Button
+                variant="contained"
+                endIcon={<ArrowForwardIcon />}
+                href="#cta"
                 sx={{
-                  color: 'white',
+                  ml: { sm: 1, md: 2 },
+                  px: { sm: 2, md: 3 },
+                  py: 1,
+                  borderRadius: '10px',
+                  background: `linear-gradient(135deg, 
+                    ${theme.palette.primary.main} 0%, 
+                    ${theme.palette.primary.dark} 100%)`,
+                  fontSize: { sm: '0.85rem', md: '0.95rem' },
+                  fontWeight: 600,
+                  transition: 'all 0.3s ease-in-out',
+                  whiteSpace: 'nowrap',
                   '&:hover': {
-                    backgroundColor: alpha('#fff', 0.1),
+                    transform: 'translateY(-2px)',
+                    boxShadow: `0 8px 25px -5px ${alpha(
+                      theme.palette.primary.main,
+                      0.5
+                    )}`,
                   },
                 }}
               >
-                <ListItemText primary={item.label} />
-              </ListItem>
-            ))}
-            <ListItem sx={{ mt: 2 }}>
-              <Button
-                variant="contained"
-                fullWidth
-                sx={{
-                  background: `linear-gradient(135deg, 
-                    ${alpha('#fff', 0.2)} 0%, 
-                    ${alpha('#fff', 0.1)} 100%)`,
-                  backdropFilter: 'blur(10px)',
-                  border: `1px solid ${alpha('#fff', 0.2)}`,
-                  color: 'white',
-                  fontWeight: 600,
-                }}
-              >
-                Get Started
+                Request Demo
               </Button>
-            </ListItem>
-          </List>
-        </Box>
-      </Drawer>
-    </>
+            </Box>
+          )}
+
+          {/* Mobile Menu Button */}
+          {isMobile && (
+            <IconButton
+              sx={{
+                color: 'white',
+              }}
+              onClick={() => setIsMobileMenuOpen(true)}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+
+          <MobileMenu
+            isOpen={isMobileMenuOpen}
+            onClose={() => setIsMobileMenuOpen(false)}
+          />
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };

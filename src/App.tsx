@@ -3,14 +3,9 @@ import { Layout } from './components/Layout';
 import { Dashboard } from './components/Dashboard';
 import { PortfoliosPage } from './components/PortfoliosPage';
 import { AppProvider } from './context/AppContext';
-
-// 임시 랜딩 페이지
-const LandingPage = () => (
-  <div style={{ padding: 20 }}>
-    <h1>Welcome to xDataRoom</h1>
-    <a href="/dashboard">Go to Dashboard</a>
-  </div>
-);
+import { DocumentsPage } from './components/DocumentsPage';
+import { SettingsPage } from './components/SettingsPage';
+import { LandingPage } from './components/landing/LandingPage';
 
 const App = () => {
   return (
@@ -21,9 +16,8 @@ const App = () => {
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/portfolio" element={<PortfoliosPage />} />
-            <Route path="/documents" element={<div>Documents Page</div>} />
-            <Route path="/reports" element={<div>Reports Page</div>} />
-            <Route path="/settings" element={<div>Settings Page</div>} />
+            <Route path="/documents" element={<DocumentsPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

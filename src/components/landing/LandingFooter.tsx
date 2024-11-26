@@ -1,77 +1,162 @@
 import React from 'react';
-import { Box, Container, Grid, Typography, Link } from '@mui/material';
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Link,
+  Stack,
+  alpha,
+  useTheme,
+} from '@mui/material';
 
-const footerSections = [
-  {
-    title: '회사 정보',
-    links: [
-      { label: 'About Us', href: '#' },
-      { label: 'Careers', href: '#' },
-      { label: 'Contact Us', href: '#' },
+const footerLinks = {
+  product: {
+    title: 'Product',
+    items: [
+      { label: 'Features', href: '#features' },
+      { label: 'Security', href: '#security' },
+      { label: 'Pricing', href: '#pricing' },
+      { label: 'How it Works', href: '#how-it-works' },
     ],
   },
-  {
-    title: '법적 정보',
-    links: [
-      { label: 'Privacy Policy', href: '#' },
-      { label: 'Terms of Service', href: '#' },
-      { label: 'Security', href: '#' },
+  company: {
+    title: 'Company',
+    items: [
+      { label: 'About Us', href: '/about' },
+      { label: 'Careers', href: '/careers' },
+      { label: 'Blog', href: '/blog' },
+      { label: 'Contact', href: '/contact' },
     ],
   },
-  {
-    title: '소셜 미디어',
-    links: [
-      { label: 'LinkedIn', href: '#' },
-      { label: 'Twitter', href: '#' },
-      { label: 'Facebook', href: '#' },
+  resources: {
+    title: 'Resources',
+    items: [
+      { label: 'Documentation', href: '/docs' },
+      { label: 'API Reference', href: '/api' },
+      { label: 'Support', href: '/support' },
+      { label: 'Status', href: '/status' },
     ],
   },
-];
+  legal: {
+    title: 'Legal',
+    items: [
+      { label: 'Privacy Policy', href: '/privacy' },
+      { label: 'Terms of Service', href: '/terms' },
+      { label: 'Cookie Policy', href: '/cookies' },
+    ],
+  },
+};
 
 export const LandingFooter: React.FC = () => {
+  const theme = useTheme();
+  const currentYear = new Date().getFullYear();
+
   return (
     <Box
       component="footer"
       sx={{
-        py: 6,
-        backgroundColor: 'grey.900',
-        color: 'white',
+        py: { xs: 6, md: 8 },
+        background: alpha('#000', 0.98),
+        position: 'relative',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '1px',
+          background: `linear-gradient(90deg, 
+            transparent 0%,
+            ${alpha('#fff', 0.1)} 50%,
+            transparent 100%
+          )`,
+        },
       }}
     >
       <Container maxWidth="lg">
         <Grid container spacing={4}>
-          {footerSections.map((section) => (
-            <Grid item xs={12} sm={4} key={section.title}>
-              <Typography variant="h6" gutterBottom>
+          <Grid item xs={12} md={4}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontSize: '1.5rem',
+                fontWeight: 800,
+                background:
+                  'linear-gradient(to right, #FFFFFF 20%, #94A3B8 80%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+                mb: 2,
+              }}
+            >
+              xDataRoom
+            </Typography>
+            <Typography
+              sx={{
+                color: 'grey.400',
+                maxWidth: '300px',
+                mb: 3,
+              }}
+            >
+              Transforming portfolio data management for modern investment
+              firms.
+            </Typography>
+          </Grid>
+
+          {Object.entries(footerLinks).map(([key, section]) => (
+            <Grid item xs={6} sm={3} md={2} key={key}>
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  color: 'white',
+                  fontWeight: 600,
+                  mb: 2,
+                }}
+              >
                 {section.title}
               </Typography>
-              {section.links.map((link) => (
-                <Box key={link.label} sx={{ mb: 1 }}>
+              <Stack spacing={1.5}>
+                {section.items.map((item) => (
                   <Link
-                    href={link.href}
+                    key={item.label}
+                    href={item.href}
                     sx={{
                       color: 'grey.400',
                       textDecoration: 'none',
+                      fontSize: '0.9rem',
+                      transition: 'all 0.2s ease-in-out',
                       '&:hover': {
                         color: 'white',
                       },
                     }}
                   >
-                    {link.label}
+                    {item.label}
                   </Link>
-                </Box>
-              ))}
+                ))}
+              </Stack>
             </Grid>
           ))}
         </Grid>
-        <Typography
-          variant="body2"
-          color="grey.400"
-          align="center"
-          sx={{ mt: 4 }}
+
+        <Box
+          sx={{
+            mt: 8,
+            pt: 3,
+            borderTop: `1px solid ${alpha('#fff', 0.1)}`,
+            textAlign: 'center',
+          }}
         >
-          © {new Date().getFullYear()} XVDR. All rights reserved.
-        </Typography>
+          <Typography
+            sx={{
+              color: 'grey.500',
+              fontSize: '0.875rem',
+            }}
+          >
+            © {currentYear} xDataRoom. All rights reserved.
+          </Typography>
+        </Box>
       </Container>
     </Box>
   );

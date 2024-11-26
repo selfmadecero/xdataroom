@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import MobileMenu from './MobileMenu';
+import MobileMenu from '../landing/MobileMenu';
 
 const navItems = [
   { label: 'Features', href: '#features' },

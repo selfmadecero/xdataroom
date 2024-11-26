@@ -56,10 +56,23 @@ export const Footer: React.FC = () => {
     <Box
       component="footer"
       sx={{
-        py: { xs: 6, sm: 8, md: 10 },
+        py: { xs: 6, md: 8 },
         background: alpha('#000', 0.98),
         position: 'relative',
         overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '1px',
+          background: `linear-gradient(90deg, 
+            transparent 0%,
+            ${alpha('#fff', 0.1)} 50%,
+            transparent 100%
+          )`,
+        },
       }}
     >
       <Container maxWidth="lg">

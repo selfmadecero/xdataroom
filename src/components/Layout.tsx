@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
   Box,
   List,
@@ -17,25 +17,47 @@ import {
   Dashboard as DashboardIcon,
   Business as BusinessIcon,
   Description as DescriptionIcon,
-  Assessment as ReportsIcon,
   Settings as SettingsIcon,
   Search as SearchIcon,
   Notifications as NotificationsIcon,
   KeyboardArrowDown as KeyboardArrowDownIcon,
+  Logout as LogoutIcon,
 } from '@mui/icons-material';
 
 export const Layout = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const location = useLocation();
 
   const menuItems = [
     { text: 'Home', icon: <DashboardIcon />, path: '/dashboard' },
     { text: 'Portfolios', icon: <BusinessIcon />, path: '/portfolio' },
     { text: 'Documents', icon: <DescriptionIcon />, path: '/documents' },
-    { text: 'Reports', icon: <ReportsIcon />, path: '/reports' },
     { text: 'Settings', icon: <SettingsIcon />, path: '/settings' },
   ];
+
+  // 현재 경로에 맞는 초기 인덱스 설정
+  const initialIndex = menuItems.findIndex(
+    (item) => item.path === location.pathname
+  );
+  const [selectedIndex, setSelectedIndex] = useState(
+    initialIndex !== -1 ? initialIndex : 0
+  );
+
+  // 경로가 변경될 때만 selectedIndex 업데이트
+  useEffect(() => {
+    const currentIndex = menuItems.findIndex(
+      (item) => item.path === location.pathname
+    );
+    if (currentIndex !== -1) {
+      setSelectedIndex(currentIndex);
+    }
+  }, [location.pathname]);
+
+  const handleLogout = () => {
+    // 여기에 로그아웃 로직 추가 (예: 토큰 제거 등)
+    navigate('/');
+  };
 
   return (
     <Box sx={{ display: 'flex', height: '100vh', bgcolor: '#F8FAFC' }}>
@@ -120,6 +142,34 @@ export const Layout = () => {
             </ListItemButton>
           ))}
         </List>
+
+        {/* Logout Button */}
+        <Box sx={{ p: 2, borderTop: '1px solid', borderColor: 'grey.200' }}>
+          <ListItemButton
+            onClick={handleLogout}
+            sx={{
+              borderRadius: 1,
+              '&:hover': {
+                bgcolor: 'error.50',
+                '& .MuiListItemIcon-root, & .MuiTypography-root': {
+                  color: 'error.main',
+                },
+              },
+            }}
+          >
+            <ListItemIcon sx={{ minWidth: 40, color: 'grey.600' }}>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="Logout"
+              primaryTypographyProps={{
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                color: 'grey.700',
+              }}
+            />
+          </ListItemButton>
+        </Box>
       </Box>
 
       {/* Main Content */}

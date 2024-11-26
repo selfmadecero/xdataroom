@@ -55,10 +55,10 @@ export const FAQSection: React.FC = () => {
       id="faq"
       sx={{
         py: { xs: 8, sm: 10, md: 16, lg: 20 },
-        background: `linear-gradient(170deg, 
-          ${alpha('#000', 0.99)} 0%,
-          ${alpha('#0A0A0A', 0.97)} 50%,
-          ${alpha('#000', 0.99)} 100%)`,
+        px: { xs: 2, sm: 3, md: 4 },
+        background: `linear-gradient(180deg, 
+          ${alpha('#000', 0.98)} 0%,
+          ${alpha('#000', 0.95)} 100%)`,
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -70,16 +70,16 @@ export const FAQSection: React.FC = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          opacity: 0.08,
+          opacity: 0.2,
           background: `
-            radial-gradient(circle at 70% 20%, 
-              ${alpha(theme.palette.primary.dark, 0.15)} 0%, 
-              transparent 60%),
-            radial-gradient(circle at 30% 80%, 
-              ${alpha(theme.palette.primary.dark, 0.1)} 0%, 
-              transparent 60%)
+            radial-gradient(circle at 20% 20%, 
+              ${alpha(theme.palette.primary.dark, 0.3)} 0%, 
+              transparent 50%),
+            radial-gradient(circle at 80% 80%, 
+              ${alpha(theme.palette.primary.dark, 0.3)} 0%, 
+              transparent 50%)
           `,
-          filter: 'blur(150px)',
+          filter: 'blur(60px)',
         }}
       />
 

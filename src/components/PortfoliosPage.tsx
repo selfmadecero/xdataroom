@@ -24,12 +24,18 @@ import {
 } from '@mui/icons-material';
 import { PortfolioList } from './PortfolioList';
 import { PortfolioGrid } from './PortfolioGrid';
+import { AddPortfolioInPageModal } from './modals/AddPortfolioInPageModal';
+import { FollowUpModal } from './modals/FollowUpModal';
+import { SendReminderModal } from './modals/SendReminderModal';
 
 export const PortfoliosPage = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [addPortfolioModalOpen, setAddPortfolioModalOpen] = useState(false);
+  const [followUpModalOpen, setFollowUpModalOpen] = useState(false);
+  const [reminderModalOpen, setReminderModalOpen] = useState(false);
 
   const handleViewModeChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -60,6 +66,7 @@ export const PortfoliosPage = () => {
             variant="contained"
             size="medium"
             sx={{ textTransform: 'none' }}
+            onClick={() => setAddPortfolioModalOpen(true)}
           >
             Add Portfolio
           </Button>
@@ -200,6 +207,7 @@ export const PortfoliosPage = () => {
                 variant="outlined"
                 size="small"
                 sx={{ textTransform: 'none' }}
+                onClick={() => setFollowUpModalOpen(true)}
               >
                 Follow Up
               </Button>
@@ -223,6 +231,7 @@ export const PortfoliosPage = () => {
                 variant="outlined"
                 size="small"
                 sx={{ textTransform: 'none' }}
+                onClick={() => setReminderModalOpen(true)}
               >
                 Send Reminder
               </Button>
@@ -233,6 +242,53 @@ export const PortfoliosPage = () => {
 
       {/* Portfolio List/Grid */}
       {viewMode === 'grid' ? <PortfolioGrid /> : <PortfolioList />}
+
+      <AddPortfolioInPageModal
+        open={addPortfolioModalOpen}
+        onClose={() => setAddPortfolioModalOpen(false)}
+      />
+
+      <FollowUpModal
+        open={followUpModalOpen}
+        onClose={() => setFollowUpModalOpen(false)}
+        companies={['TechVision Labs', 'Growth Dynamics']}
+        issue={{
+          title: 'Multiple Overdue Documents',
+          description:
+            'Several critical documents are past their submission deadline.',
+          status: 'overdue',
+        }}
+      />
+
+      <SendReminderModal
+        open={reminderModalOpen}
+        onClose={() => setReminderModalOpen(false)}
+        data={{
+          title: 'Quarterly Financial Documents Due Soon',
+          description:
+            '3 companies need to submit quarterly financial documents',
+          companies: [
+            {
+              name: 'TechVision Labs',
+              documents: [
+                'Q1 2024 Financial Statements',
+                'Cash Flow Projections',
+              ],
+              dueDate: 'Mar 30, 2024',
+            },
+            {
+              name: 'Growth Dynamics',
+              documents: ['Q1 2024 Financial Statements', 'Balance Sheet'],
+              dueDate: 'Mar 30, 2024',
+            },
+            {
+              name: 'InnovatePro Solutions',
+              documents: ['Q1 2024 Financial Statements', 'Income Statement'],
+              dueDate: 'Mar 30, 2024',
+            },
+          ],
+        }}
+      />
     </Box>
   );
 };

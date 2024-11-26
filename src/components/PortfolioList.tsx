@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -6,59 +6,49 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Paper,
   Chip,
-  IconButton,
+  Button,
   LinearProgress,
   Box,
   Typography,
-  Button,
 } from '@mui/material';
-import { MoreVert as MoreVertIcon } from '@mui/icons-material';
+import { PortfolioDetailModal } from './modals/PortfolioDetailModal';
+import { NewPortfolioRequestModal } from './modals/NewPortfolioRequestModal';
 
 const portfolios = [
   {
     id: 1,
     name: 'TechVision Labs',
+    industry: 'Technology',
+    stage: 'Series B',
     status: 'active',
     documentProgress: 80,
     pendingRequests: 3,
-    lastActivity: '2 days ago',
+    investmentDate: '2023-01-15',
+    investmentAmount: '$2,000,000',
+    ownership: '15%',
   },
-  {
-    id: 2,
-    name: 'Growth Dynamics',
-    status: 'active',
-    documentProgress: 95,
-    pendingRequests: 1,
-    lastActivity: '1 day ago',
-  },
-  {
-    id: 3,
-    name: 'InnovatePro Solutions',
-    status: 'inactive',
-    documentProgress: 45,
-    pendingRequests: 5,
-    lastActivity: '5 days ago',
-  },
-  {
-    id: 4,
-    name: 'NextGen Robotics',
-    status: 'active',
-    documentProgress: 75,
-    pendingRequests: 2,
-    lastActivity: '3 days ago',
-  },
-  {
-    id: 5,
-    name: 'DataFlow Systems',
-    status: 'inactive',
-    documentProgress: 60,
-    pendingRequests: 4,
-    lastActivity: '1 week ago',
-  },
+  // ... 더 많은 포트폴리오 데이터
 ];
 
 export const PortfolioList = () => {
+  const [selectedPortfolio, setSelectedPortfolio] = useState<any>(null);
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
+  const [newRequestModalOpen, setNewRequestModalOpen] = useState(false);
+  const [selectedPortfolioForRequest, setSelectedPortfolioForRequest] =
+    useState<any>(null);
+
+  const handleViewDetails = (portfolio: any) => {
+    setSelectedPortfolio(portfolio);
+    setDetailModalOpen(true);
+  };
+
+  const handleNewRequest = (portfolio: any) => {
+    setSelectedPortfolioForRequest(portfolio);
+    setNewRequestModalOpen(true);
+  };
+
   const getStatusInfo = (status: string) => {
     switch (status) {
       case 'active':
@@ -71,61 +61,90 @@ export const PortfolioList = () => {
   };
 
   return (
-    <TableContainer>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Portfolio Name</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Document Progress</TableCell>
-            <TableCell>Pending Requests</TableCell>
-            <TableCell>Last Activity</TableCell>
-            <TableCell align="right">Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {portfolios.map((portfolio) => (
-            <TableRow key={portfolio.id} hover>
-              <TableCell>{portfolio.name}</TableCell>
-              <TableCell>
-                <Chip
-                  label={getStatusInfo(portfolio.status).label}
-                  color={getStatusInfo(portfolio.status).color}
-                  size="small"
-                />
-              </TableCell>
-              <TableCell>
-                <Box sx={{ width: '100%', maxWidth: 200 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+    <>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Portfolio Name</TableCell>
+              <TableCell>Industry</TableCell>
+              <TableCell>Stage</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Document Progress</TableCell>
+              <TableCell align="right">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {portfolios.map((portfolio) => (
+              <TableRow key={portfolio.id} hover>
+                <TableCell>{portfolio.name}</TableCell>
+                <TableCell>{portfolio.industry}</TableCell>
+                <TableCell>{portfolio.stage}</TableCell>
+                <TableCell>
+                  <Chip
+                    label={getStatusInfo(portfolio.status).label}
+                    color={getStatusInfo(portfolio.status).color}
+                    size="small"
+                  />
+                </TableCell>
+                <TableCell>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 2,
+                      maxWidth: 200,
+                    }}
+                  >
                     <LinearProgress
                       variant="determinate"
                       value={portfolio.documentProgress}
-                      sx={{ flex: 1, mr: 1, height: 6, borderRadius: 3 }}
+                      sx={{ flex: 1, height: 6, borderRadius: 3 }}
                     />
                     <Typography variant="caption" color="text.secondary">
                       {portfolio.documentProgress}%
                     </Typography>
                   </Box>
-                </Box>
-              </TableCell>
-              <TableCell>{portfolio.pendingRequests} requests</TableCell>
-              <TableCell>{portfolio.lastActivity}</TableCell>
-              <TableCell align="right">
-                <Button
-                  variant="outlined"
-                  size="small"
-                  sx={{ mr: 1, textTransform: 'none' }}
-                >
-                  View Details
-                </Button>
-                <IconButton size="small">
-                  <MoreVertIcon />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                </TableCell>
+                <TableCell align="right">
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    sx={{ mr: 1, textTransform: 'none' }}
+                    onClick={() => handleViewDetails(portfolio)}
+                  >
+                    View Details
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    sx={{ textTransform: 'none' }}
+                    onClick={() => handleNewRequest(portfolio)}
+                  >
+                    New Request
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {selectedPortfolio && (
+        <PortfolioDetailModal
+          open={detailModalOpen}
+          onClose={() => setDetailModalOpen(false)}
+          portfolio={selectedPortfolio}
+        />
+      )}
+
+      {selectedPortfolioForRequest && (
+        <NewPortfolioRequestModal
+          open={newRequestModalOpen}
+          onClose={() => setNewRequestModalOpen(false)}
+          portfolio={selectedPortfolioForRequest}
+        />
+      )}
+    </>
   );
 };
